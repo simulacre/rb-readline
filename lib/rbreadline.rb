@@ -1417,12 +1417,87 @@ module RbReadline
     return matches
   end
 
+  def rl_vi_movement_mode(count, key)
+    @_rl_keymap = @vi_movement_keymap
+    @_rl_vi_last_key_before_insert = key
+    0
+  end
+
+  def rl_vi_delete(count, key)
+    rl_delete(count, key)
+  end
+
+  # TODO implement
+  def rl_vi_next_word(count, key)
+    rl_forward_word(count, key)
+  end
+
+  def rl_vi_prev_word(count, key)
+    # is there a difference between emacs backward and vi prev?
+    rl_backward_word(count, key)
+  end
+
+  def rl_vi_char_search(count, key)
+    if 't' == key
+      _rl_char_search(count, FTO, BTO)
+    elsif 'f' == key
+      _rl_char_search(count, FFIND, BFIND)
+    elsif 'T' == key
+      _rl_char_search(count, BTO, FTO)
+    elsif 'F' == key
+      _rl_char_search(count, BFIND, FFIND)
+    end
+  end
+
+  # TODO implement
+  # example: d$ - delete from the cursor to the end of the line
+  # example: dt  - delete from the cursor to the next space
+  def rl_vi_delete_to(count, key)
+
+  end
+
+  # insert whatever is in the buffer
+  # TODO implement
+  def rl_vi_put(count, key)
+
+  end
+
+  # TODO implement
+  def rl_vi_end_word(count, key)
+
+  end
+
+  # TODO
+  def rl_vi_subst(count, key)
+
+  end
+
+  # Advance the cursor by one and enter insert mode
+  # TODO if at the end of the line go into insert mode after the last character
+  def rl_vi_append_mode(count, key)
+    _rl_set_insert_mode(RL_IM_INSERT, 1)    # vi mode ignores insert mode
+    @rl_editing_mode = @vi_mode
+    rl_forward_byte(1, key)
+    rl_vi_insertion_mode(1, key)
+    0
+  end
 
   def rl_vi_editing_mode(count, key)
     _rl_set_insert_mode(RL_IM_INSERT, 1)    # vi mode ignores insert mode
     @rl_editing_mode = @vi_mode
     rl_vi_insertion_mode(1, key)
     0
+  end
+
+  # Repeat the last command
+  # TODO implement
+  def rl_vi_redo(count, key)
+
+  end
+
+  # TODO implement
+  def rl_vi_undo(count, key)
+
   end
 
   # Switching from one mode to the other really just involves
